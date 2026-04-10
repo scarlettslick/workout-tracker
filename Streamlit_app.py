@@ -6,7 +6,12 @@ st.set_page_config(page_title="Workout Tracker", page_icon="🏋️")
 st.set_page_config(page_title="Workout Tracker", page_icon="🏋️")
 
 def get_connection():
-    return psycopg2.connect(st.secrets["DB_URL"])
+    conn = psycopg2.connect(st.secrets["DB_URL"])
+    conn.autocommit = True
+    cur = conn.cursor()
+    cur.execute("SET search_path TO public;")
+    cur.close()
+    return conn
 
 st.title("🏋️ Personal Workout Tracker")
 st.write("Welcome! Use the sidebar to navigate between pages.")
